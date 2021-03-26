@@ -1938,6 +1938,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -1945,10 +1946,15 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     comment: Object
   },
+  created: function created() {// TODO: Add initialization here if needed...
+  },
   data: function data() {
     return {
       isCommentFormVisible: false,
-      isRepliesSectionVisible: false
+      isRepliesSectionVisible: false,
+      replies: {
+        comments: []
+      }
     };
   },
   methods: {
@@ -1958,11 +1964,12 @@ __webpack_require__.r(__webpack_exports__);
     viewReplies: function viewReplies() {
       var _this = this;
 
+      this.isCommentFormVisible = true;
       var params = {
         parentId: this.comment.id
       };
       _services_comment_service__WEBPACK_IMPORTED_MODULE_0__.CommentService.get(params).then(function (comments) {
-        _this.comment.replies.comments = comments.data.comments;
+        _this.replies = comments;
         _this.isRepliesSectionVisible = true;
       })["catch"](function (error) {
         console.log({
@@ -1974,7 +1981,8 @@ __webpack_require__.r(__webpack_exports__);
       this.isCommentFormVisible = true;
     },
     updateCommentList: function updateCommentList(comment) {
-      this.comment.replies.push(comment);
+      this.replies.comments.push(comment);
+      this.isRepliesSectionVisible = true;
     }
   }
 });
@@ -1993,8 +2001,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _services_comment_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/comment.service */ "./resources/js/services/comment.service.js");
-//
-//
 //
 //
 //
@@ -2083,6 +2089,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _services_comment_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/comment.service */ "./resources/js/services/comment.service.js");
 //
 //
 //
@@ -2091,10 +2098,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "CommentsComponent",
   props: {
-    comments: Array
+    comments: Object
+  },
+  data: function data() {
+    return {
+      page: 1
+    };
+  },
+  created: function created() {// TODO: Add initialization here if needed...
+  },
+  methods: {
+    loadMore: function loadMore() {
+      var _this = this;
+
+      var params = {
+        page: ++this.page
+      };
+      _services_comment_service__WEBPACK_IMPORTED_MODULE_0__.CommentService.get(params).then(function (comments) {
+        _this.comments.data.comments = _this.comments.data.comments.concat(comments.data.comments);
+        _this.comments.link = comments.link;
+        _this.comments.meta = comments.meta;
+      })["catch"](function (error) {
+        console.log({
+          error: error
+        });
+      });
+    }
   }
 });
 
@@ -2134,7 +2170,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      comments: []
+      comments: {}
     };
   },
   methods: {
@@ -2142,7 +2178,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       _services_comment_service__WEBPACK_IMPORTED_MODULE_0__.CommentService.get().then(function (comments) {
-        _this.comments = comments.data.comments;
+        _this.comments = comments;
       })["catch"](function (error) {
         console.log({
           error: error
@@ -2150,14 +2186,8 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     updateCommentList: function updateCommentList(comment) {
-      console.log({
-        comment: comment
-      });
-      /*this.comments.forEach(item => {
-       });*/
-
       if (comment.parentId === null) {
-        this.comments.unshift(comment);
+        this.comments.data.comments.unshift(comment);
       }
     }
   }
@@ -48041,78 +48071,78 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("section", [
-    _c(
-      "div",
-      { staticClass: "box-comment" },
-      [
-        _c("img", {
-          staticClass: "img-circle img-sm",
-          attrs: {
-            src:
-              "https://img.icons8.com/color/36/000000/administrator-male.png",
-            alt: "User Image"
-          }
-        }),
-        _vm._v(" "),
-        _c("div", { staticClass: "comment-text" }, [
-          _c("span", { staticClass: "username" }, [
-            _vm._v(
-              "\n                " +
-                _vm._s(_vm.comment.username) +
-                "\n                "
-            ),
-            _c("span", { staticClass: "text-muted pull-right" }, [
-              _vm._v(_vm._s(_vm.toLocalDateTime(_vm.comment.createdAt)))
-            ])
-          ]),
-          _vm._v("\n            " + _vm._s(_vm.comment.message) + "\n        ")
-        ]),
-        _vm._v(" "),
-        _vm.comment.replies.comments.length
-          ? _c(
+  return _vm.comment.id
+    ? _c("section", [
+        _c(
+          "div",
+          { staticClass: "box-comment" },
+          [
+            _c("img", {
+              staticClass: "img-circle img-sm",
+              attrs: {
+                src:
+                  "https://img.icons8.com/color/36/000000/administrator-male.png",
+                alt: "User Image"
+              }
+            }),
+            _vm._v(" "),
+            _c("div", { staticClass: "comment-text" }, [
+              _c("span", { staticClass: "username" }, [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(_vm.comment.username) +
+                    "\n                "
+                ),
+                _c("span", { staticClass: "text-muted pull-right" }, [
+                  _vm._v(_vm._s(_vm.toLocalDateTime(_vm.comment.createdAt)))
+                ])
+              ]),
+              _vm._v(
+                "\n            " + _vm._s(_vm.comment.message) + "\n        "
+              )
+            ]),
+            _vm._v(" "),
+            _vm.comment.replies.comments.length
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-default btn-xs text-muted",
+                    attrs: { type: "button" },
+                    on: { click: _vm.viewReplies }
+                  },
+                  [_vm._v("\n            View replies\n        ")]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c(
               "button",
               {
                 staticClass: "btn btn-default btn-xs text-muted",
                 attrs: { type: "button" },
-                on: { click: _vm.viewReplies }
+                on: { click: _vm.reply }
               },
-              [
-                _c("i", { staticClass: "fa fa-share" }),
-                _vm._v(" View replies\n        ")
-              ]
-            )
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.isRepliesSectionVisible
-          ? _c("comments", {
-              attrs: { comments: _vm.comment.replies.comments }
-            })
-          : _vm._e(),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-default btn-xs text-muted",
-            attrs: { type: "button" },
-            on: { click: _vm.reply }
-          },
-          [
-            _c("i", { staticClass: "fa fa-thumbs-o-up" }),
-            _vm._v(" Reply\n        ")
-          ]
-        ),
-        _vm._v(" "),
-        _vm.isCommentFormVisible
-          ? _c("comment-form", {
-              attrs: { parentId: _vm.comment.id },
-              on: { commentAdded: _vm.updateCommentList }
-            })
-          : _vm._e()
-      ],
-      1
-    )
-  ])
+              [_vm._v("\n            Reply\n        ")]
+            ),
+            _vm._v(" "),
+            _vm.isRepliesSectionVisible
+              ? _c("comments", {
+                  staticClass: "pl-5",
+                  attrs: { comments: _vm.replies }
+                })
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.isCommentFormVisible
+              ? _c("comment-form", {
+                  staticClass: "pl-5",
+                  attrs: { parentId: _vm.comment.id },
+                  on: { commentAdded: _vm.updateCommentList }
+                })
+              : _vm._e()
+          ],
+          1
+        )
+      ])
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -48171,7 +48201,7 @@ var render = function() {
                       expression: "commentFormGroup.username"
                     }
                   ],
-                  staticClass: "form-control input-sm",
+                  staticClass: "form-control form-control-sm",
                   attrs: { type: "text", placeholder: "Name" },
                   domProps: { value: _vm.commentFormGroup.username },
                   on: {
@@ -48199,7 +48229,7 @@ var render = function() {
                       expression: "commentFormGroup.message"
                     }
                   ],
-                  staticClass: "form-control input-sm",
+                  staticClass: "form-control form-control-sm",
                   attrs: { type: "text", placeholder: "Write a comment..." },
                   domProps: { value: _vm.commentFormGroup.message },
                   on: {
@@ -48261,16 +48291,35 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("section", [
-    _c(
-      "div",
-      { staticClass: "box-footer box-comments" },
-      _vm._l(_vm.comments, function(comment) {
-        return _c("comment", { key: comment.id, attrs: { comment: comment } })
-      }),
-      1
-    )
-  ])
+  return _vm.comments.data
+    ? _c("section", [
+        _c(
+          "div",
+          { staticClass: "box-footer box-comments" },
+          [
+            _vm._l(_vm.comments.data.comments, function(comment) {
+              return _c("comment", {
+                key: comment.id,
+                attrs: { comment: comment }
+              })
+            }),
+            _vm._v(" "),
+            _vm.comments.meta.total > _vm.comments.data.comments.length
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-default btn-xs text-muted",
+                    attrs: { type: "button" },
+                    on: { click: _vm.loadMore }
+                  },
+                  [_vm._v("\n            Load previous comments\n        ")]
+                )
+              : _vm._e()
+          ],
+          2
+        )
+      ])
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true

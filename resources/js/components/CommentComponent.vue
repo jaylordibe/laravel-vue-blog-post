@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section v-if="comment.id">
         <div class="box-comment">
             <img class="img-circle img-sm" src="https://img.icons8.com/color/36/000000/administrator-male.png"
                  alt="User Image">
@@ -12,14 +12,15 @@
             </div>
 
             <button type="button" v-if="comment.replies.comments.length" @click="viewReplies" class="btn btn-default btn-xs text-muted">
-                <i class="fa fa-share"></i> View replies
+                View replies
             </button>
-            <comments v-if="isRepliesSectionVisible" :comments="comment.replies.comments"></comments>
 
             <button type="button" @click="reply" class="btn btn-default btn-xs text-muted">
-                <i class="fa fa-thumbs-o-up"></i> Reply
+                Reply
             </button>
-            <comment-form v-if="isCommentFormVisible" :parentId="comment.id" @commentAdded="updateCommentList"></comment-form>
+
+            <comments v-if="isRepliesSectionVisible" :comments="replies" class="pl-5"></comments>
+            <comment-form v-if="isCommentFormVisible" :parentId="comment.id" @commentAdded="updateCommentList" class="pl-5"></comment-form>
         </div>
     </section>
 </template>
@@ -33,10 +34,16 @@
         props: {
             comment: Object
         },
+        created() {
+            // TODO: Add initialization here if needed...
+        },
         data() {
             return {
                 isCommentFormVisible: false,
-                isRepliesSectionVisible: false
+                isRepliesSectionVisible: false,
+                replies: {
+                    comments: []
+                }
             };
         },
         methods: {
@@ -44,13 +51,14 @@
                 return DateTime.fromSeconds(date).toFormat('ff');
             },
             viewReplies() {
+                this.isCommentFormVisible = true;
                 const params = {
                     parentId: this.comment.id
                 };
 
                 CommentService.get(params)
                     .then(comments => {
-                        this.comment.replies.comments = comments.data.comments;
+                        this.replies = comments;
                         this.isRepliesSectionVisible = true;
                     })
                     .catch(error => {
@@ -61,7 +69,8 @@
                 this.isCommentFormVisible = true;
             },
             updateCommentList(comment) {
-                this.comment.replies.push(comment);
+                this.replies.comments.push(comment);
+                this.isRepliesSectionVisible = true;
             }
         }
     }

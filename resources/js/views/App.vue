@@ -22,27 +22,22 @@
         },
         data() {
             return {
-                comments: []
+                comments: {}
             };
         },
         methods: {
             getComments() {
                 CommentService.get()
                     .then(comments => {
-                        this.comments = comments.data.comments;
+                        this.comments = comments;
                     })
                     .catch(error => {
                         console.log({error});
                     });
             },
             updateCommentList(comment) {
-                console.log({comment});
-                /*this.comments.forEach(item => {
-
-                });*/
-
                 if (comment.parentId === null) {
-                    this.comments.unshift(comment);
+                    this.comments.data.comments.unshift(comment);
                 }
             }
         }

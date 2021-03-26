@@ -28,12 +28,12 @@ class CreateCommentsTable extends Migration {
             $table->text('message');
         });
 
-        Schema::table(DatabaseTableConstant::COMMENTS, function (Blueprint $table) {
+        /*Schema::table(DatabaseTableConstant::COMMENTS, function (Blueprint $table) {
             $table->foreign('parent_id')
                 ->references('id')
                 ->on(DatabaseTableConstant::COMMENTS)
                 ->onDelete('cascade');
-        });
+        });*/
     }
 
     /**

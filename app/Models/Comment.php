@@ -59,6 +59,6 @@ class Comment extends Model {
      * @return HasMany
      */
     public function replies() {
-        return $this->hasMany(Comment::class, 'parent_id')->limit(1);
+        return $this->hasMany(Comment::class, 'parent_id');
     }
 }

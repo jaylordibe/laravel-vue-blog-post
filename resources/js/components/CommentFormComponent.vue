@@ -7,12 +7,10 @@
                 <div class="img-push">
                     <div class="row">
                         <div class="col-sm-4">
-                            <input type="text" v-model="commentFormGroup.username" class="form-control input-sm"
-                                   placeholder="Name">
+                            <input type="text" v-model="commentFormGroup.username" class="form-control form-control-sm" placeholder="Name">
                         </div>
                         <div class="col-sm-6">
-                            <input type="text" v-model="commentFormGroup.message" class="form-control input-sm"
-                                   placeholder="Write a comment...">
+                            <input type="text" v-model="commentFormGroup.message" class="form-control form-control-sm" placeholder="Write a comment...">
                         </div>
                         <div class="col-sm-2">
                             <button type="submit" class="btn btn-primary btn-sm">Submit</button>

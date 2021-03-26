@@ -12,7 +12,7 @@
                         </div>
                         <div class="col-sm-6">
                             <input type="text" v-model="commentFormGroup.message" class="form-control input-sm"
-                                   placeholder="Message">
+                                   placeholder="Write a comment...">
                         </div>
                         <div class="col-sm-2">
                             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
@@ -29,9 +29,16 @@
 
     export default {
         name: "CommentFormComponent",
+        props: {
+            parentId: Number
+        },
+        created() {
+            console.log({parentId: this.parentId});
+        },
         data() {
             return {
                 commentFormGroup: {
+                    parentId: this.parentId,
                     username: '',
                     message: ''
                 }

@@ -12,6 +12,10 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class CommentRepositoryImplementation implements CommentRepository {
 
+    private const RELATIONS = [
+        'replies'
+    ];
+
     /**
      * CommentRepositoryImplementation constructor.
      */
@@ -28,7 +32,8 @@ class CommentRepositoryImplementation implements CommentRepository {
             $parentId = null;
         }
 
-        return Comment::where('parent_id', $parentId)
+        return Comment::with(self::RELATIONS)
+            ->where('parent_id', $parentId)
             ->orderByDesc('created_at')
             ->paginate(AppConstant::DEFAULT_PAGE_LIMIT);
     }

@@ -20,7 +20,7 @@ export class CommentService {
      * @param params
      * @returns {Promise}
      */
-    static get(params) {
+    static get(params = {}) {
         const endpoint = '/comments';
         return HttpUtil.get(endpoint, params);
     }

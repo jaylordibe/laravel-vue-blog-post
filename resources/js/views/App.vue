@@ -4,8 +4,8 @@
             <div class="col-md-6">
                 <div class="box box-widget">
                     <blog-post></blog-post>
+                    <comment-form :parentId="0" @commentAdded="updateCommentList"></comment-form>
                     <comments :comments="comments"></comments>
-                    <comment-form @commentAdded="updateCommentList"></comment-form>
                 </div>
             </div>
         </div>

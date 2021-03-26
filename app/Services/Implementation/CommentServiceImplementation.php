@@ -30,7 +30,6 @@ class CommentServiceImplementation implements CommentService {
         $parentId = $request->getInputAsInt('parentId');
 
         $comment = new Comment();
-        $comment->post_id = 1;
         $comment->username = $request->getInputAsString('username');
         $comment->message = $request->getInputAsString('message');
 

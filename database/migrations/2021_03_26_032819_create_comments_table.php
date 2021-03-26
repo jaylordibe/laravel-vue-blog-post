@@ -21,10 +21,18 @@ class CreateCommentsTable extends Migration {
             $table->dateTime('created_at')->useCurrent();
             $table->dateTime('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
             $table->dateTime('deleted_at')->nullable();
-            $table->unsignedBigInteger('post_id');
+            $table->unsignedBigInteger('user_id')->nullable(); // Nullable as we did not create User entity
+            $table->unsignedBigInteger('post_id')->nullable(); // Nullable as we did not create Post entity
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->string('username');
             $table->text('message');
+        });
+
+        Schema::table(DatabaseTableConstant::COMMENTS, function (Blueprint $table) {
+            $table->foreign('parent_id')
+                ->references('id')
+                ->on(DatabaseTableConstant::COMMENTS)
+                ->onDelete('cascade');
         });
     }
 

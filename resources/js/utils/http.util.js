@@ -35,7 +35,7 @@ export class HttpUtil {
             const queryString = paramKeys.map(key => key + '=' + params[key]).join('&');
 
             if (queryString) {
-                endpoint.concat('?').concat(queryString);
+                endpoint = endpoint.concat('?').concat(queryString);
             }
         }
 

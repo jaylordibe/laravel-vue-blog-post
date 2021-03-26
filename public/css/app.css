@@ -1,3 +1,11 @@
+body {
+    background-color: #f9f9fa
+}
+
+a:hover {
+    cursor: pointer;
+}
+
 .container {
     margin-bottom: 500px
 }
@@ -5,10 +13,6 @@
 .stretch-card > .card {
     width: 100%;
     min-width: 100%
-}
-
-body {
-    background-color: #f9f9fa
 }
 
 .flex {

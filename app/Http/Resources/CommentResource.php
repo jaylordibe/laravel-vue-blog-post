@@ -21,7 +21,8 @@ class CommentResource extends JsonResource {
             'postId' => $this->post_id,
             'parentId' => $this->parent_id,
             'username' => $this->username,
-            'message' => $this->message
+            'message' => $this->message,
+            'replies' => new CommentsResource($this->replies)
         ];
     }
 }
